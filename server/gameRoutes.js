@@ -1,0 +1,61 @@
+const express = require('express');
+const GameState = require('./gameModel');
+
+const router = express.Router();
+
+// GET /api/game/:userId - obtener estado de juego
+router.get('/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const state = await GameState.findOne({ userId }).lean();
+    if (!state) {
+      return res.status(404).json({ message: 'No game state found for this user' });
+    }
+    res.json(state);
+  } catch (err) {
+    console.error('Error fetching game state:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// PUT /api/game/:userId - guardar/actualizar estado de juego
+router.put('/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const payload = req.body || {};
+
+  try {
+    const update = {
+      userId,
+      userName: String(payload.userName || '').trim(),
+      points: Number(payload.points) || 0,
+      autoClick: {
+        speedLevel: Number(payload.autoClick?.speedLevel) || 0,
+        powerLevel: Number(payload.autoClick?.powerLevel) || 0,
+        intervalMs: Number(payload.autoClick?.intervalMs) || 0,
+      },
+      autoInvest: {
+        level: Number(payload.autoInvest?.level) || 0,
+        cost: Number(payload.autoInvest?.cost) || 0,
+        intervalMs: Number(payload.autoInvest?.intervalMs) || 0,
+      },
+      objective: {
+        level: Number(payload.objective?.level) || 1,
+        progress: Number(payload.objective?.progress) || 0,
+      },
+    };
+
+    const state = await GameState.findOneAndUpdate(
+      { userId },
+      { $set: update },
+      { new: true, upsert: true, runValidators: true }
+    ).lean();
+
+    res.json(state);
+  } catch (err) {
+    console.error('Error saving game state:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+module.exports = router;

@@ -1,3 +1,8 @@
+let currentUserId;
+let currentUserName;
+
+// Aseguro la identidad del usuario al cargar la página
+
 // Obtengo el boton para registrar los puntos.
 const clickButton = document.getElementById('clicker-button');
 
@@ -29,4 +34,35 @@ if (sidebarToggleButton) {
     sidebarToggleButton.addEventListener('click', () => {
         document.body.classList.toggle('sidebar-hidden');
     });
+}
+
+function ensureUserIdentity() {
+  let userId = localStorage.getItem('clickerUserId');
+  let userName = localStorage.getItem('clickerUserName');
+
+  if (!userId) {
+    if (crypto.randomUUID) {
+      userId = crypto.randomUUID();
+    } else {
+      userId = 'user-' + Date.now() + '-' + Math.floor(Math.random() * 1000000);
+    }
+    localStorage.setItem('clickerUserId', userId);
+  }
+
+  if (!userName) {
+    // Pedir nombre hasta que ponga algo no vacío o cancele
+    let name = '';
+    while (!name) {
+      name = window.prompt('Bienvenido! Ingresa un nombre de usuario (será único en el juego):');
+      if (name === null) {
+        // Si cancela, puedes o bien salir del loop o poner un nombre por defecto
+        name = '';
+        alert('Necesitas un nombre de usuario para guardar tu progreso.');
+      }
+    }
+    userName = name.trim();
+    localStorage.setItem('clickerUserName', userName);
+  }
+
+  return { userId, userName };
 }
