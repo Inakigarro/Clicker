@@ -1,8 +1,6 @@
 let currentUserId;
 let currentUserName;
 
-// Aseguro la identidad del usuario al cargar la página
-
 // Obtengo el boton para registrar los puntos.
 const clickButton = document.getElementById('clicker-button');
 
@@ -25,6 +23,9 @@ function handleClick() {
     points += 1; // Incremento los puntos en 1 por cada clic
     localStorage.setItem('points', points); // Guardo los puntos en localStorage
     updatePointsDisplay(); // Actualizo la interfaz
+    if (typeof scheduleSaveToBackend === 'function') {
+        scheduleSaveToBackend();
+    }
 }
 
 clickButton.addEventListener('click', handleClick);
@@ -66,3 +67,19 @@ function ensureUserIdentity() {
 
   return { userId, userName };
 }
+
+// Inicializar identidad al cargar
+window.addEventListener('DOMContentLoaded', async () => {
+  const identity = ensureUserIdentity();
+  currentUserId = identity.userId;
+  currentUserName = identity.userName;
+  console.log('Usuario identificado:', currentUserName, currentUserId);
+  
+  // Inicializar sincronización con backend
+  // Esperamos un poco para que todos los módulos se carguen
+  setTimeout(async () => {
+    if (typeof initializeBackendSync === 'function') {
+      await initializeBackendSync();
+    }
+  }, 500);
+});

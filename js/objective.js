@@ -85,6 +85,9 @@ function investInObjective() {
 
 	saveObjectiveState();
 	updateObjectiveUI();
+	if (typeof scheduleSaveToBackend === 'function') {
+		scheduleSaveToBackend();
+	}
 }
 
 window.addEventListener('DOMContentLoaded', () => {

@@ -111,6 +111,9 @@ function buyAutoInvestUpgrade() {
     saveAutoInvestState();
     updateAutoInvestUI();
     restartAutoInvestInterval();
+    if (typeof scheduleSaveToBackend === 'function') {
+        scheduleSaveToBackend();
+    }
 }
 
 window.addEventListener('DOMContentLoaded', () => {

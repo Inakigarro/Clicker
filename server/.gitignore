@@ -1,0 +1,15 @@
+# Variables de entorno - NO SUBIR A GIT
+.env
+.env.local
+.env.production
+
+# Node modules
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

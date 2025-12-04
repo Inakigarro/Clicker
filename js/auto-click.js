@@ -121,6 +121,9 @@ function buyAutoSpeedUpgrade() {
 	saveAutoClickState();
 	updateAutoClickCostsDisplay();
 	restartAutoClickInterval();
+	if (typeof scheduleSaveToBackend === 'function') {
+		scheduleSaveToBackend();
+	}
 }
 
 function buyAutoPowerUpgrade() {
@@ -137,6 +140,9 @@ function buyAutoPowerUpgrade() {
 	saveAutoClickState();
 	updateAutoClickCostsDisplay();
 	restartAutoClickInterval();
+	if (typeof scheduleSaveToBackend === 'function') {
+		scheduleSaveToBackend();
+	}
 }
 
 // Conectamos los botones cuando el DOM esté listo
