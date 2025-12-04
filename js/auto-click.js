@@ -20,8 +20,9 @@ let autoClickCurrentIntervalMs = BASE_INTERVAL_MS; // intervalo actual de ejecuc
 
 
 function getCurrentIntervalMs() {
-	// Cada nivel de velocidad reduce un 10% el intervalo, hasta un mínimo
-	const factor = Math.pow(0.9, autoClickSpeedLevel); // 0.9, 0.81, 0.729...
+	// Cada nivel de velocidad reduce un 1% el intervalo, hasta un mínimo
+	const factor = Math.pow(0.99, autoClickSpeedLevel); // 0.99, 0.9801, 0.970299...
+
 	return Math.max(MIN_INTERVAL_MS, Math.floor(BASE_INTERVAL_MS * factor));
 }
 
