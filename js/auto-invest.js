@@ -1,0 +1,126 @@
+const AUTO_INVEST_STORAGE_KEY = 'autoInvestState';
+const AUTO_INVEST_BASE_INTERVAL_MS = 30000; // 30 segundos
+const AUTO_INVEST_MIN_INTERVAL_MS = 5000; // no bajar de 5s para no romper el juego
+const AUTO_INVEST_BASE_COST = 1000; // costo inicial mínimo
+const AUTO_INVEST_COST_MULTIPLIER = 1.1; // cada mejora +10%
+
+
+let autoInvestInterval = null;
+let autoInvestLevel = 0; // aumenta puntos invertidos automáticamente
+let autoInvestCurrentCost = AUTO_INVEST_BASE_COST;
+let autoInvestCurrentIntervalMs = AUTO_INVEST_BASE_INTERVAL_MS; // intervalo actual de ejecución
+
+function getAutoInvestIntervalMs() {
+    // Reducimos el intervalo con el nivel, pero limitado a un mínimo
+    const factor = Math.pow(0.9, autoInvestLevel); // 0.9, 0.81, ...
+    const interval = AUTO_INVEST_BASE_INTERVAL_MS * factor;
+    return Math.max(AUTO_INVEST_MIN_INTERVAL_MS, Math.floor(interval));
+}
+
+function getAutoInvestCost() {
+    return Math.trunc(autoInvestCurrentCost);
+}
+
+function performAutoInvestTick() {
+    if (typeof getObjectiveCost !== 'function') return;
+    if (typeof investInObjective !== 'function') return;
+
+    const cost = getObjectiveCost();
+
+    if (typeof points === 'number' && points >= cost) {
+        investInObjective();
+    }
+}
+
+function saveAutoInvestState() {
+    const state = {
+        level: autoInvestLevel,
+        cost: autoInvestCurrentCost,
+        intervalMs: autoInvestCurrentIntervalMs,
+    };
+    localStorage.setItem(AUTO_INVEST_STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadAutoInvestState() {
+    const raw = localStorage.getItem(AUTO_INVEST_STORAGE_KEY);
+    if (!raw) return;
+
+    try {
+        const state = JSON.parse(raw);
+        if (typeof state.level === 'number' && state.level >= 0) {
+            autoInvestLevel = state.level;
+        }
+        if (typeof state.cost === 'number' && state.cost >= AUTO_INVEST_BASE_COST) {
+            autoInvestCurrentCost = state.cost;
+        }
+        if (
+            typeof state.intervalMs === 'number' &&
+            state.intervalMs >= AUTO_INVEST_MIN_INTERVAL_MS &&
+            state.intervalMs <= AUTO_INVEST_BASE_INTERVAL_MS
+        ) {
+            autoInvestCurrentIntervalMs = state.intervalMs;
+        }
+    } catch (e) {
+        // ignoramos errores de parseo
+    }
+}
+
+function restartAutoInvestInterval() {
+    if (autoInvestInterval) {
+        clearInterval(autoInvestInterval);
+    }
+
+    if (autoInvestLevel <= 0) {
+        autoInvestInterval = null;
+        return;
+    }
+
+    autoInvestCurrentIntervalMs = getAutoInvestIntervalMs();
+    const intervalMs = autoInvestCurrentIntervalMs;
+    autoInvestInterval = setInterval(performAutoInvestTick, intervalMs);
+
+    saveAutoInvestState();
+}
+
+function updateAutoInvestUI() {
+    const upgradeButton = document.getElementById('auto-invest-upgrade');
+    if (!upgradeButton) return;
+
+    const cost = getAutoInvestCost();
+    const labelElement = upgradeButton.querySelector('small');
+    if (labelElement) {
+        labelElement.textContent = `Costo: ${cost}`;
+    }
+}
+
+function buyAutoInvestUpgrade() {
+    if (typeof points === 'undefined') return;
+
+    const cost = getAutoInvestCost();
+    if (points < cost) return;
+
+    points -= cost;
+    autoInvestLevel += 1;
+    autoInvestCurrentCost = Math.trunc(autoInvestCurrentCost * AUTO_INVEST_COST_MULTIPLIER);
+
+    localStorage.setItem('points', points);
+    if (typeof updatePointsDisplay === 'function') {
+        updatePointsDisplay();
+    }
+
+    saveAutoInvestState();
+    updateAutoInvestUI();
+    restartAutoInvestInterval();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    loadAutoInvestState();
+
+    const autoInvestButton = document.getElementById('auto-invest-upgrade');
+    if (autoInvestButton) {
+        autoInvestButton.addEventListener('click', buyAutoInvestUpgrade);
+    }
+
+    updateAutoInvestUI();
+    restartAutoInvestInterval();
+});
