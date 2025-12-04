@@ -31,14 +31,38 @@ if (!MONGODB_URI) {
 }
 
 // Configuración de CORS
+const allowedOrigins = process.env.FRONTEND_URL 
+  ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
+  : ['*'];
+
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || '*', // En producción, especifica tu dominio
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
+  origin: function (origin, callback) {
+    // Permitir requests sin origin (como Postman, mobile apps)
+    if (!origin) return callback(null, true);
+    
+    // Si FRONTEND_URL es '*', permitir todo
+    if (allowedOrigins.includes('*')) {
+      return callback(null, true);
+    }
+    
+    // Verificar si el origin está en la lista permitida
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
+// Log de CORS configurado
+console.log('🔐 CORS configurado para:', allowedOrigins.join(', '));
 
 app.get('/', (req, res) => {
   res.json({ status: 'ok', message: 'Clicker backend is running' });
