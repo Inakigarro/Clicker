@@ -7,7 +7,7 @@ const isLocalhost = window.location.hostname === 'localhost' ||
 
 // En producción, puedes configurar esta variable antes de desplegar
 // o usar una variable en tu build process
-const PRODUCTION_API_URL = 'https://tu-backend-desplegado.com/api/game';
+const PRODUCTION_API_URL = 'https://zclicker-backend.onrender.com/api/game';
 const DEVELOPMENT_API_URL = 'http://localhost:3001/api/game';
 
 const API_BASE_URL = isLocalhost ? DEVELOPMENT_API_URL : PRODUCTION_API_URL;
