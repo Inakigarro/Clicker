@@ -158,6 +158,58 @@
 			</div>
 		</div>
 
+		<!-- Modal de Recompensa de Prestigio -->
+		<div class="boss-modal" id="prestige-reward-modal">
+			<div class="boss-modal-content prestige-modal-content">
+				<div class="prestige-header">
+					<i class="fa-solid fa-crown prestige-crown"></i>
+					<h2>¡Jefe Derrotado!</h2>
+				</div>
+				
+				<div class="prestige-info">
+					<p class="prestige-congratulations">
+						Has alcanzado el <strong>Nivel <span id="current-level-display">10</span></strong>
+					</p>
+					
+					<div class="prestige-stats-container">
+						<div class="prestige-stat-box">
+							<div class="stat-label">Prestigio Actual</div>
+							<div class="stat-value-large" id="current-prestige-level">0</div>
+							<div class="stat-sublabel">Multiplicador: <span id="current-multiplier">×1.0</span></div>
+						</div>
+						<div class="prestige-arrow">
+							<i class="fa-solid fa-arrow-right"></i>
+						</div>
+						<div class="prestige-stat-box highlight">
+							<div class="stat-label">Nuevo Prestigio</div>
+							<div class="stat-value-large gold" id="new-prestige-level">1</div>
+							<div class="stat-sublabel gold">Multiplicador: <span id="new-multiplier">×1.5</span></div>
+						</div>
+					</div>
+					
+					<div class="prestige-warning">
+						<i class="fa-solid fa-triangle-exclamation"></i>
+						<p><strong>Resetear</strong> eliminará todo tu progreso actual pero ganarás un multiplicador permanente de puntos.</p>
+					</div>
+				</div>
+				
+				<div class="prestige-actions">
+					<button class="prestige-btn prestige-accept" id="accept-prestige-btn">
+						<i class="fa-solid fa-crown"></i>
+						Resetear y Ganar Prestigio
+					</button>
+					<button class="prestige-btn prestige-decline" id="decline-prestige-btn">
+						<i class="fa-solid fa-forward"></i>
+						Continuar Jugando
+					</button>
+				</div>
+				
+				<p class="prestige-note">
+					Si continúas jugando, podrás obtener prestigio en el próximo jefe.
+				</p>
+			</div>
+		</div>
+
 		<!-- Scripts -->
 		<script src="js/version-manager.js"></script>
 		<script src="js/api-client.js"></script>

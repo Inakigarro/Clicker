@@ -1205,3 +1205,192 @@ body {
     25% { transform: translateX(-10px); }
     75% { transform: translateX(10px); }
 }
+
+/* Modal de Recompensa de Prestigio */
+.prestige-modal-content {
+    max-width: 700px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+    border: 3px solid #ffd700;
+}
+
+.prestige-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.prestige-crown {
+    font-size: 3rem;
+    color: #ffd700;
+    margin-bottom: 0.5rem;
+    display: block;
+    animation: pulse 2s infinite;
+}
+
+.prestige-header h2 {
+    color: #ffd700;
+    font-size: 2rem;
+    margin: 0;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.prestige-info {
+    margin-bottom: 1.5rem;
+}
+
+.prestige-congratulations {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+}
+
+.prestige-stats-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.prestige-stat-box {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.prestige-stat-box.highlight {
+    background: rgba(255, 215, 0, 0.1);
+    border-color: #ffd700;
+}
+
+.prestige-stat-box .stat-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.5rem;
+}
+
+.stat-value-large {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--text-color);
+    margin: 0.5rem 0;
+}
+
+.stat-value-large.gold {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.stat-sublabel {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.stat-sublabel.gold {
+    color: #ffd700;
+}
+
+.prestige-arrow {
+    font-size: 2rem;
+    color: #ffd700;
+}
+
+.prestige-warning {
+    background: rgba(255, 193, 7, 0.1);
+    border-left: 4px solid #ffc107;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.prestige-warning i {
+    color: #ffc107;
+    font-size: 1.5rem;
+    margin-top: 0.2rem;
+}
+
+.prestige-warning p {
+    margin: 0;
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.prestige-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.prestige-btn {
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.prestige-accept {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #1a1a2e;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.prestige-accept:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+}
+
+.prestige-decline {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.prestige-decline:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.prestige-note {
+    text-align: center;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    font-style: italic;
+}
+
+/* Responsive para modal de prestigio */
+@media (max-width: 768px) {
+    .prestige-modal-content {
+        max-width: 95%;
+        padding: 1.5rem;
+    }
+    
+    .prestige-stats-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .prestige-arrow {
+        transform: rotate(90deg);
+    }
+    
+    .prestige-actions {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-value-large {
+        font-size: 2.5rem;
+    }
+}

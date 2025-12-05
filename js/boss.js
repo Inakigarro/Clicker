@@ -2,11 +2,49 @@
 
 // Configuración de jefes
 const BOSS_CONFIG = {
-	levels: [10, 25, 50, 75, 100], // Niveles donde aparecen jefes
+	initialLevels: [10, 25, 50, 75, 100], // Primeros jefes
+	recurringInterval: 25, // Después del nivel 100, cada 25 niveles
 	baseHP: 10000,
 	hpMultiplier: 1.5,
 	baseTime: 30, // segundos
 };
+
+/**
+ * Determina si un nivel es un nivel de jefe
+ */
+function isBossLevel(level) {
+	// Primeros niveles específicos
+	if (BOSS_CONFIG.initialLevels.includes(level)) {
+		return true;
+	}
+	
+	// Después del nivel 100, cada 25 niveles
+	if (level > 100 && level % BOSS_CONFIG.recurringInterval === 0) {
+		return true;
+	}
+	
+	return false;
+}
+
+/**
+ * Calcula el índice del jefe para escalar dificultad
+ */
+function getBossIndex(level) {
+	const initialLevels = BOSS_CONFIG.initialLevels;
+	const idx = initialLevels.indexOf(level);
+	
+	if (idx !== -1) {
+		return idx;
+	}
+	
+	// Para niveles recurrentes después de 100
+	if (level > 100) {
+		const additionalBosses = Math.floor((level - 100) / BOSS_CONFIG.recurringInterval);
+		return initialLevels.length + additionalBosses;
+	}
+	
+	return 0;
+}
 
 // Configuración de armas
 const WEAPONS = {
@@ -52,7 +90,7 @@ function checkForBossEncounter() {
 	if (typeof objectiveLevel === 'undefined') return;
 	
 	// Verificar si alcanzamos un nivel de jefe y no lo hemos enfrentado
-	const shouldTriggerBoss = BOSS_CONFIG.levels.includes(objectiveLevel) && 
+	const shouldTriggerBoss = isBossLevel(objectiveLevel) && 
 	                          objectiveLevel > bossState.lastBossLevel;
 	
 	if (shouldTriggerBoss && !bossState.active) {
@@ -66,9 +104,9 @@ function checkForBossEncounter() {
 function startBossEncounter() {
 	if (typeof objectiveLevel === 'undefined') return;
 	
-	// Calcular HP del jefe basado en el nivel
-	const levelIndex = BOSS_CONFIG.levels.indexOf(objectiveLevel);
-	bossState.maxHP = Math.floor(BOSS_CONFIG.baseHP * Math.pow(BOSS_CONFIG.hpMultiplier, levelIndex));
+	// Calcular HP del jefe basado en el índice (escala infinitamente)
+	const bossIndex = getBossIndex(objectiveLevel);
+	bossState.maxHP = Math.floor(BOSS_CONFIG.baseHP * Math.pow(BOSS_CONFIG.hpMultiplier, bossIndex));
 	bossState.currentHP = bossState.maxHP;
 	bossState.timeRemaining = BOSS_CONFIG.baseTime;
 	bossState.active = true;
@@ -297,25 +335,17 @@ function victoryBoss() {
 		clearInterval(bossState.timerInterval);
 	}
 	
-	const messageEl = document.getElementById('boss-message');
-	if (messageEl) {
-		messageEl.textContent = '¡VICTORIA! +1 Nivel de Prestigio';
-		messageEl.className = 'boss-message victory';
-	}
-	
-	// Incrementar prestigio
-	prestigeLevel++;
-	localStorage.setItem('prestigeLevel', prestigeLevel);
+	// Marcar este nivel como completado
 	bossState.lastBossLevel = objectiveLevel;
 	localStorage.setItem('lastBossLevel', bossState.lastBossLevel);
 	
-	// Actualizar UI de prestigio
-	updatePrestigeDisplay();
+	// Cerrar modal de combate
+	hideBossModal();
 	
-	// Cerrar modal después de 3 segundos
+	// Mostrar modal de recompensa/prestigio
 	setTimeout(() => {
-		hideBossModal();
-	}, 3000);
+		showPrestigeRewardModal();
+	}, 500);
 }
 
 /**
@@ -360,6 +390,153 @@ function updatePrestigeDisplay() {
 	}
 }
 
+/**
+ * Muestra el modal de recompensa por derrotar al jefe
+ */
+function showPrestigeRewardModal() {
+	const modal = document.getElementById('prestige-reward-modal');
+	if (!modal) return;
+	
+	const currentLevel = objectiveLevel;
+	const newPrestigeLevel = prestigeLevel + 1;
+	const newMultiplier = 1 + (newPrestigeLevel * 0.5);
+	
+	// Actualizar contenido del modal
+	document.getElementById('current-level-display').textContent = currentLevel;
+	document.getElementById('new-prestige-level').textContent = newPrestigeLevel;
+	document.getElementById('current-prestige-level').textContent = prestigeLevel;
+	document.getElementById('new-multiplier').textContent = `×${newMultiplier.toFixed(1)}`;
+	document.getElementById('current-multiplier').textContent = `×${getPrestigeMultiplier().toFixed(1)}`;
+	
+	modal.classList.add('active');
+}
+
+/**
+ * Oculta el modal de recompensa
+ */
+function hidePrestigeRewardModal() {
+	const modal = document.getElementById('prestige-reward-modal');
+	if (modal) {
+		modal.classList.remove('active');
+	}
+}
+
+/**
+ * Acepta el prestigio y resetea el juego
+ */
+function acceptPrestige() {
+	// Incrementar prestigio
+	prestigeLevel++;
+	localStorage.setItem('prestigeLevel', prestigeLevel);
+	
+	// Resetear todo el progreso
+	points = 0;
+	localStorage.setItem('points', '0');
+	
+	// Resetear auto-click
+	if (typeof autoClickSpeedLevel !== 'undefined') {
+		autoClickSpeedLevel = 0;
+		localStorage.setItem('autoClickSpeedLevel', '0');
+	}
+	if (typeof autoClickPowerLevel !== 'undefined') {
+		autoClickPowerLevel = 0;
+		localStorage.setItem('autoClickPowerLevel', '0');
+	}
+	
+	// Resetear auto-invest
+	if (typeof autoInvestLevel !== 'undefined') {
+		autoInvestLevel = 0;
+		localStorage.setItem('autoInvestLevel', '0');
+	}
+	
+	// Resetear objetivos
+	if (typeof objectiveLevel !== 'undefined') {
+		objectiveLevel = 1;
+		objectiveProgress = 0;
+		localStorage.setItem('objectiveLevel', '1');
+		localStorage.setItem('objectiveProgress', '0');
+	}
+	
+	// Limpiar último jefe vencido para permitir enfrentar jefes desde nivel 10 de nuevo
+	bossState.lastBossLevel = 0;
+	localStorage.setItem('lastBossLevel', '0');
+	
+	// Guardar en backend si está disponible
+	if (typeof scheduleSaveToBackend === 'function') {
+		scheduleSaveToBackend();
+	}
+	
+	// Ocultar modal
+	hidePrestigeRewardModal();
+	
+	// Mostrar mensaje de confirmación
+	showPrestigeConfirmation(prestigeLevel);
+	
+	// Recargar la página después de 2 segundos
+	setTimeout(() => {
+		location.reload();
+	}, 2000);
+}
+
+/**
+ * Rechaza el prestigio y continúa jugando
+ */
+function declinePrestige() {
+	hidePrestigeRewardModal();
+	
+	// Mostrar mensaje de que puede intentarlo en el próximo jefe
+	const notification = document.createElement('div');
+	notification.style.cssText = `
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+		padding: 1.5rem 2rem;
+		border-radius: 12px;
+		font-size: 1.1rem;
+		z-index: 10001;
+		box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+		text-align: center;
+	`;
+	notification.textContent = '¡Sigue jugando! Podrás resetear en el próximo jefe.';
+	document.body.appendChild(notification);
+	
+	setTimeout(() => {
+		notification.remove();
+	}, 3000);
+}
+
+/**
+ * Muestra confirmación de prestigio obtenido
+ */
+function showPrestigeConfirmation(level) {
+	const notification = document.createElement('div');
+	notification.style.cssText = `
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+		color: #1a1a2e;
+		padding: 2rem 3rem;
+		border-radius: 16px;
+		font-size: 1.3rem;
+		font-weight: bold;
+		z-index: 10001;
+		box-shadow: 0 10px 40px rgba(255, 215, 0, 0.5);
+		text-align: center;
+		border: 3px solid #ffd700;
+	`;
+	notification.innerHTML = `
+		<i class="fa-solid fa-crown" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
+		¡Nivel de Prestigio ${level} Alcanzado!<br>
+		<span style="font-size: 0.9rem; opacity: 0.8;">Reiniciando juego...</span>
+	`;
+	document.body.appendChild(notification);
+}
+
 // Event listeners para los botones de armas
 window.addEventListener('DOMContentLoaded', () => {
 	// Cargar último nivel de jefe vencido
@@ -372,6 +549,10 @@ window.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('weapon-rapid')?.addEventListener('click', () => useWeapon('rapid'));
 	document.getElementById('weapon-heavy')?.addEventListener('click', () => useWeapon('heavy'));
 	document.getElementById('weapon-tactical')?.addEventListener('click', () => useWeapon('tactical'));
+	
+	// Botones de prestigio
+	document.getElementById('accept-prestige-btn')?.addEventListener('click', acceptPrestige);
+	document.getElementById('decline-prestige-btn')?.addEventListener('click', declinePrestige);
 	
 	// Actualizar display inicial de prestigio
 	updatePrestigeDisplay();
