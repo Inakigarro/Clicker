@@ -276,6 +276,53 @@ body {
                 }
             }
         }
+
+        .stats-sidebar {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 1rem;
+            background-color: var(--background-secondary-color);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+            min-width: 220px;
+            max-height: calc(100% - 2rem);
+            overflow-y: auto;
+
+            h3 {
+                margin: 0 0 0.5rem 0;
+                font-size: 1.1rem;
+                text-align: center;
+                color: var(--text-color);
+                border-bottom: 2px solid var(--text-color);
+                padding-bottom: 0.5rem;
+            }
+
+            .stat-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.4rem 0.5rem;
+                background-color: var(--background-color);
+                border-radius: 8px;
+                gap: 0.5rem;
+
+                .stat-label {
+                    font-size: 0.85rem;
+                    color: var(--text-color);
+                    opacity: 0.9;
+                }
+
+                .stat-value {
+                    font-weight: bold;
+                    font-size: 0.9rem;
+                    color: var(--text-color);
+                }
+            }
+        }
     }
 
 

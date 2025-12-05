@@ -133,6 +133,10 @@ function restartAutoClickInterval() {
 			if (typeof updatePointsDisplay === 'function') {
 				updatePointsDisplay();
 			}
+			// Actualizar estadísticas de puntos totales
+			if (typeof addToTotalPoints === 'function') {
+				addToTotalPoints(pointsPerTick);
+			}
 			// Mostrar animación de puntos flotantes
 			if (typeof showAutoClickPoints === 'function') {
 				showAutoClickPoints(pointsPerTick);

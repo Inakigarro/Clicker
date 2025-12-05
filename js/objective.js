@@ -90,6 +90,11 @@ function investInObjective() {
 	points -= cost;
 	objectiveProgress += cost;
 
+	// Actualizar estadísticas de inversión
+	if (typeof addToInvestedPoints === 'function') {
+		addToInvestedPoints(cost);
+	}
+
 	// Guardamos puntos y objetivo
 	localStorage.setItem('points', points);
 	if (typeof updatePointsDisplay === 'function') {

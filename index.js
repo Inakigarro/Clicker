@@ -35,6 +35,14 @@ function handleClick() {
     localStorage.setItem('points', points); // Guardo los puntos en localStorage
     updatePointsDisplay(); // Actualizo la interfaz
     
+    // Actualizar estadísticas
+    if (typeof incrementManualClicks === 'function') {
+        incrementManualClicks();
+    }
+    if (typeof addToTotalPoints === 'function') {
+        addToTotalPoints(1);
+    }
+    
     // Mostrar animación de puntos flotantes
     if (typeof showManualClickPoints === 'function') {
         showManualClickPoints();
