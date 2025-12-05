@@ -71,6 +71,12 @@ function updateObjectiveUI() {
 		const required = getObjectiveRequiredPoints();
 		const percent = Math.min(100, (objectiveProgress / required) * 100);
 		barFill.style.width = `${percent}%`;
+		
+		// Actualizar texto de la barra
+		const barText = document.getElementById('objective-bar-text');
+		if (barText) {
+			barText.textContent = `${objectiveProgress} / ${required}`;
+		}
 	}
 }
 
@@ -88,6 +94,12 @@ function investInObjective() {
 	localStorage.setItem('points', points);
 	if (typeof updatePointsDisplay === 'function') {
 		updatePointsDisplay();
+	}
+	
+	// Mostrar animación de puntos invertidos
+	const investButton = document.getElementById('objective-invest-button');
+	if (typeof createFloatingPoints === 'function' && investButton) {
+		createFloatingPoints(cost, investButton, 'invest');
 	}
 
 	const required = getObjectiveRequiredPoints();
