@@ -6,13 +6,14 @@ let objectiveProgress = 0; // puntos invertidos en el nivel actual
 const OBJECTIVE_STORAGE_KEY = 'objectiveState';
 
 function getObjectiveRequiredPoints() {
-	// Cada nivel requiere 100 * nivel puntos para completarse
-	return 100 * objectiveLevel;
+	// Fórmula exponencial: 100 × 1.15^nivel
+	return Math.floor(100 * Math.pow(1.15, objectiveLevel));
 }
 
 function getObjectiveCost() {
-	// costo = nivelActual + (1 * nivelActual) => 2 * nivel
-	return objectiveLevel + 1 * objectiveLevel;
+	// Fórmula exponencial: 10 × 1.1^nivel
+	// Costo de cada inversión individual
+	return Math.floor(10 * Math.pow(1.1, objectiveLevel));
 }
 
 function saveObjectiveState() {
@@ -112,6 +113,11 @@ function investInObjective() {
 		// Siguiente nivel
 		objectiveProgress -= required; // si se pasó, mantenemos el excedente
 		objectiveLevel += 1;
+		
+		// Verificar si alcanzamos un nivel de jefe
+		if (typeof checkForBossEncounter === 'function') {
+			checkForBossEncounter();
+		}
 	}
 
 	saveObjectiveState();

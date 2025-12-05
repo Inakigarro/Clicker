@@ -59,6 +59,21 @@ El proyecto destaca por su arquitectura modular, separación de responsabilidade
 - **Animaciones Suaves**: Transiciones y efectos visuales pulidos
 - **Sidebar Colapsable**: Control de visibilidad de mejoras
 
+### 🎖️ Sistema de Prestigio y Jefes
+- **Prestigio**: Multiplicadores permanentes (+50% por nivel)
+- **Boss Battles**: Mini-juegos de combate en niveles clave (10, 25, 50, etc.)
+- **3 Armas**: Click Rápido, Golpe Fuerte, Inversión Táctica
+- **Combate Activo**: 30 segundos para derrotar al jefe
+- **Recompensas**: +1 Prestigio por victoria
+- **Sin Penalización**: Reintentos ilimitados
+
+### 🔄 Sistema de Versionado (Early Access)
+- **Reset Automático**: Detecta cambios de versión importantes
+- **Una Sola Vez**: Cada jugador se resetea automáticamente al actualizar
+- **Notificaciones**: Mensajes profesionales informando cambios
+- **Panel Admin**: Herramientas para gestionar resets globales
+- Ver: `docs/RESET-SYSTEM.md` para más detalles
+
 ---
 
 ## 🛠️ Stack Tecnológico
@@ -142,9 +157,11 @@ Clicker/
 │   └── LogoVectorizado.svg # Logo del juego
 ├── js/                     # Módulos JavaScript
 │   ├── api-client.js       # Cliente REST para backend
+│   ├── version-manager.js  # Sistema de versionado y reset automático
 │   ├── stats.js            # Sistema de estadísticas
 │   ├── floating-points.js  # Animaciones flotantes
 │   ├── user-transfer.js    # Export/Import de usuario
+│   ├── boss.js             # Sistema de combate contra jefes
 │   ├── auto-click.js       # Lógica de auto-click
 │   ├── auto-invest.js      # Lógica de auto-invest
 │   ├── objective.js        # Sistema de niveles
@@ -564,6 +581,6 @@ Visita [https://inakigarro.github.io/Clicker](https://inakigarro.github.io/Click
 
 *Desarrollado con ❤️ por Iñaki Garro*
 
-*Última actualización: 4 de Diciembre de 2025*
+*Última actualización: 5 de Diciembre de 2025*
 
 </div>

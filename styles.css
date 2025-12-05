@@ -101,6 +101,28 @@ body {
             }
         }
 
+        .prestige-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border-radius: 999px;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+            margin-left: 1rem;
+            
+            i {
+                color: #8b7500;
+                font-size: 1.2rem;
+            }
+            
+            span {
+                font-weight: bold;
+                color: #8b7500;
+                font-size: 1.1rem;
+            }
+        }
+
         #theme-toggle {
             cursor: pointer;
             background-color: transparent;
@@ -741,4 +763,445 @@ body {
             }
         }
     }
+}
+
+/* Boss Battle Modal Styles */
+.boss-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    
+    &.active {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+.boss-modal-content {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(255, 107, 107, 0.3);
+    border: 2px solid #ff6b6b;
+    animation: bossEntrance 0.5s ease-out;
+}
+
+@keyframes bossEntrance {
+    from {
+        transform: scale(0.8) translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+.boss-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    
+    h2 {
+        color: #ff6b6b;
+        margin: 0;
+        font-size: 1.8rem;
+        text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+    }
+}
+
+.boss-timer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 107, 107, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    
+    i {
+        color: #ff6b6b;
+    }
+    
+    &.warning {
+        animation: timerWarning 0.5s infinite;
+    }
+}
+
+@keyframes timerWarning {
+    0%, 100% { background: rgba(255, 107, 107, 0.1); }
+    50% { background: rgba(255, 107, 107, 0.3); }
+}
+
+.boss-info {
+    margin-bottom: 1.5rem;
+}
+
+.boss-hp-container {
+    .boss-hp-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+        
+        #boss-name {
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+        
+        #boss-hp-text {
+            color: #fff;
+        }
+    }
+}
+
+.boss-hp-bar-bg {
+    width: 100%;
+    height: 24px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.boss-hp-bar {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #ff6b6b 0%, #ff8787 100%);
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+.boss-message {
+    text-align: center;
+    margin: 1rem 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-height: 1.5rem;
+    
+    &.victory {
+        color: #51cf66;
+        text-shadow: 0 0 10px rgba(81, 207, 102, 0.5);
+        animation: victoryPulse 0.5s ease-out;
+    }
+    
+    &.defeat {
+        color: #ff6b6b;
+        text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+    }
+}
+
+@keyframes victoryPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.boss-weapons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.weapon-button {
+    background: linear-gradient(135deg, #4c8bf5 0%, #7950f2 100%);
+    border: none;
+    border-radius: 12px;
+    padding: 1rem;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    
+    &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(76, 139, 245, 0.4);
+    }
+    
+    &:active:not(:disabled) {
+        transform: translateY(0);
+    }
+    
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .weapon-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .weapon-name {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 0.25rem;
+    }
+    
+    .weapon-damage {
+        display: block;
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+    
+    .weapon-cooldown {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        width: 0;
+        background: rgba(255, 255, 255, 0.3);
+    }
+}
+
+/* Responsive para modal de jefe */
+@media (max-width: 768px) {
+    .boss-modal-content {
+        padding: 1.5rem;
+        max-width: 95%;
+    }
+    
+    .boss-header h2 {
+        font-size: 1.4rem;
+    }
+    
+    .boss-weapons {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Estilos para estadísticas de prestigio */
+.prestige-stat {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 237, 78, 0.1)) !important;
+    border-left: 3px solid #ffd700 !important;
+}
+
+/* Modal de Combate contra Jefe */
+.boss-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.boss-modal.active {
+    display: flex;
+}
+
+.boss-modal-content {
+    background-color: var(--background-color);
+    border: 3px solid var(--background-secondary-color);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.4s ease;
+}
+
+.boss-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.boss-header h2 {
+    color: var(--text-color);
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.boss-timer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--background-secondary-color);
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.boss-timer i {
+    color: #ff6b6b;
+}
+
+.boss-timer.warning {
+    animation: pulse 1s infinite;
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.boss-info {
+    margin-bottom: 2rem;
+}
+
+.boss-hp-container {
+    width: 100%;
+}
+
+.boss-hp-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.boss-hp-bar-bg {
+    width: 100%;
+    height: 30px;
+    background-color: var(--background-secondary-color);
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.boss-hp-bar {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #e74c3c, #ff6b6b);
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+}
+
+.boss-weapons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.weapon-button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background-color: var(--background-secondary-color);
+    border: 2px solid var(--text-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    overflow: hidden;
+}
+
+.weapon-button i {
+    font-size: 2rem;
+    color: var(--text-color);
+}
+
+.weapon-button .weapon-name {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--text-color);
+    text-align: center;
+}
+
+.weapon-button .weapon-damage {
+    font-size: 1.2rem;
+    color: #4caf50;
+    font-weight: bold;
+}
+
+.weapon-button:hover:not(:disabled) {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    border-color: #4caf50;
+}
+
+.weapon-button:active:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+.weapon-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.weapon-cooldown {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 4px;
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    transition: width linear;
+}
+
+.boss-message {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-height: 2rem;
+    color: var(--text-color);
+}
+
+.boss-message.victory {
+    color: #2ecc71;
+    animation: victoryPulse 0.5s ease;
+}
+
+.boss-message.defeat {
+    color: #e74c3c;
+    animation: shake 0.5s ease;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes victoryPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
 }

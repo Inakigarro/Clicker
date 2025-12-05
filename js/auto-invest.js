@@ -2,23 +2,23 @@ const AUTO_INVEST_STORAGE_KEY = 'autoInvestState';
 const AUTO_INVEST_BASE_INTERVAL_MS = 30000; // 30 segundos
 const AUTO_INVEST_MIN_INTERVAL_MS = 5000; // no bajar de 5s para no romper el juego
 const AUTO_INVEST_BASE_COST = 1000; // costo inicial mínimo
-const AUTO_INVEST_COST_MULTIPLIER = 1.1; // cada mejora +10%
+const AUTO_INVEST_COST_MULTIPLIER = 1.5; // Crecimiento exponencial agresivo
 
 
 let autoInvestInterval = null;
 let autoInvestLevel = 0; // aumenta puntos invertidos automáticamente
-let autoInvestCurrentCost = AUTO_INVEST_BASE_COST;
 let autoInvestCurrentIntervalMs = AUTO_INVEST_BASE_INTERVAL_MS; // intervalo actual de ejecución
 
 function getAutoInvestIntervalMs() {
-    // Reducimos el intervalo con el nivel, pero limitado a un mínimo
-    const factor = Math.pow(0.9, autoInvestLevel); // 0.9, 0.81, ...
+    // Reducimos el intervalo 15% por nivel, limitado a un mínimo
+    const factor = Math.pow(0.85, autoInvestLevel); // 15% de reducción por nivel
     const interval = AUTO_INVEST_BASE_INTERVAL_MS * factor;
     return Math.max(AUTO_INVEST_MIN_INTERVAL_MS, Math.floor(interval));
 }
 
 function getAutoInvestCost() {
-    return Math.trunc(autoInvestCurrentCost);
+    // Costo exponencial: 1000 × 1.5^nivel
+    return Math.floor(AUTO_INVEST_BASE_COST * Math.pow(AUTO_INVEST_COST_MULTIPLIER, autoInvestLevel));
 }
 
 function performAutoInvestTick() {
@@ -35,7 +35,6 @@ function performAutoInvestTick() {
 function saveAutoInvestState() {
     const state = {
         level: autoInvestLevel,
-        cost: autoInvestCurrentCost,
         intervalMs: autoInvestCurrentIntervalMs,
     };
     localStorage.setItem(AUTO_INVEST_STORAGE_KEY, JSON.stringify(state));
@@ -49,9 +48,6 @@ function loadAutoInvestState() {
         const state = JSON.parse(raw);
         if (typeof state.level === 'number' && state.level >= 0) {
             autoInvestLevel = state.level;
-        }
-        if (typeof state.cost === 'number' && state.cost >= AUTO_INVEST_BASE_COST) {
-            autoInvestCurrentCost = state.cost;
         }
         if (
             typeof state.intervalMs === 'number' &&
@@ -114,7 +110,6 @@ function buyAutoInvestUpgrade() {
 
     points -= cost;
     autoInvestLevel += 1;
-    autoInvestCurrentCost = Math.trunc(autoInvestCurrentCost * AUTO_INVEST_COST_MULTIPLIER);
 
     localStorage.setItem('points', points);
     if (typeof updatePointsDisplay === 'function') {

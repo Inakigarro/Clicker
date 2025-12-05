@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - ZClicker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .admin-panel {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .info-box h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .info-box p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .version-info {
+            background: #e3f2fd;
+            border-left-color: #2196f3;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        
+        .action-section {
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        }
+        
+        .btn-danger:hover {
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        }
+        
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .result.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .result.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-panel">
+        <h1>🛠️ Panel de Administración</h1>
+        <p class="subtitle">ZClicker - Early Access</p>
+        
+        <div class="info-box version-info">
+            <h3>📌 Versión Actual del Juego</h3>
+            <p>Versión: <strong id="current-version">Cargando...</strong></p>
+            <p>Para cambiar la versión, edita <code>js/version-manager.js</code></p>
+        </div>
+        
+        <div class="info-box">
+            <h3>ℹ️ Sistema de Reset Automático</h3>
+            <p>
+                El juego detecta automáticamente cambios de versión y resetea el progreso
+                de cada jugador UNA sola vez cuando carga la página.
+            </p>
+        </div>
+        
+        <div class="info-box warning-box">
+            <h3>⚠️ Advertencia</h3>
+            <p>
+                El botón de abajo elimina TODOS los estados guardados en la base de datos.
+                Esta acción es irreversible.
+            </p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="player-count">-</div>
+                <div class="stat-label">Jugadores en BD</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="api-status">-</div>
+                <div class="stat-label">Estado del API</div>
+            </div>
+        </div>
+        
+        <div class="action-section">
+            <button class="btn" onclick="checkVersion()">
+                🔄 Verificar Versión
+            </button>
+            
+            <button class="btn" onclick="getStats()">
+                📊 Obtener Estadísticas
+            </button>
+            
+            <button class="btn btn-danger" onclick="confirmReset()">
+                🗑️ Resetear Base de Datos
+            </button>
+        </div>
+        
+        <div class="result" id="result"></div>
+    </div>
+    
+    <script>
+        const API_URL = 'http://localhost:3001/api/game';
+        
+        // Verificar versión del juego
+        async function checkVersion() {
+            showResult('Verificando versión...', 'success');
+            
+            try {
+                const response = await fetch('../js/version-manager.js');
+                const text = await response.text();
+                const match = text.match(/GAME_VERSION\s*=\s*['"]([^'"]+)['"]/);
+                
+                if (match) {
+                    const version = match[1];
+                    document.getElementById('current-version').textContent = version;
+                    showResult(`✅ Versión del juego: ${version}`, 'success');
+                } else {
+                    showResult('⚠️ No se pudo leer la versión', 'error');
+                }
+            } catch (error) {
+                showResult('❌ Error al verificar versión: ' + error.message, 'error');
+            }
+        }
+        
+        // Obtener estadísticas de la BD
+        async function getStats() {
+            showResult('Consultando estadísticas...', 'success');
+            
+            try {
+                // Esta es una aproximación ya que no tenemos endpoint de stats
+                // En producción podrías agregar uno
+                showResult('ℹ️ Endpoint de estadísticas no disponible', 'error');
+                document.getElementById('api-status').textContent = '✅';
+                document.getElementById('player-count').textContent = '?';
+            } catch (error) {
+                showResult('❌ Error: ' + error.message, 'error');
+                document.getElementById('api-status').textContent = '❌';
+            }
+        }
+        
+        // Confirmar reset
+        function confirmReset() {
+            const confirmed = confirm(
+                '⚠️ ADVERTENCIA ⚠️\n\n' +
+                'Esto eliminará TODOS los estados de juego de la base de datos.\n\n' +
+                '¿Estás absolutamente seguro de que quieres continuar?'
+            );
+            
+            if (confirmed) {
+                resetDatabase();
+            }
+        }
+        
+        // Resetear base de datos
+        async function resetDatabase() {
+            showResult('🔄 Reseteando base de datos...', 'success');
+            
+            try {
+                const response = await fetch(`${API_URL}/admin/reset-all`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                
+                showResult(
+                    `✅ Base de datos reseteada exitosamente!\n` +
+                    `📊 Documentos eliminados: ${result.deletedCount}\n\n` +
+                    `💡 Los jugadores verán sus progresos reseteados en la próxima recarga.`,
+                    'success'
+                );
+                
+                document.getElementById('player-count').textContent = '0';
+                
+            } catch (error) {
+                showResult('❌ Error al resetear: ' + error.message, 'error');
+            }
+        }
+        
+        // Mostrar resultado
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = message;
+            resultDiv.className = `result ${type}`;
+            resultDiv.style.display = 'block';
+            resultDiv.style.whiteSpace = 'pre-line';
+        }
+        
+        // Verificar versión al cargar
+        checkVersion();
+    </script>
+</body>
+</html>

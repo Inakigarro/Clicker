@@ -79,6 +79,7 @@ function collectCurrentGameState() {
         userId: currentUserId,
         userName: currentUserName,
         points: points || 0,
+        prestigeLevel: prestigeLevel || 0,
         autoClick: {
             speedLevel: autoClickSpeedLevel || 0,
             powerLevel: autoClickPowerLevel || 0,
@@ -86,7 +87,6 @@ function collectCurrentGameState() {
         },
         autoInvest: {
             level: autoInvestLevel || 0,
-            cost: autoInvestCurrentCost || 0,
             intervalMs: autoInvestCurrentIntervalMs || 0,
         },
         objective: {
@@ -110,6 +110,12 @@ function applyGameState(state) {
         if (typeof updatePointsDisplay === 'function') {
             updatePointsDisplay();
         }
+    }
+    
+    // Prestige Level
+    if (typeof state.prestigeLevel === 'number') {
+        prestigeLevel = state.prestigeLevel;
+        localStorage.setItem('prestigeLevel', prestigeLevel);
     }
     
     // Auto Click
@@ -136,9 +142,6 @@ function applyGameState(state) {
     if (state.autoInvest) {
         if (typeof state.autoInvest.level === 'number') {
             autoInvestLevel = state.autoInvest.level;
-        }
-        if (typeof state.autoInvest.cost === 'number') {
-            autoInvestCurrentCost = state.autoInvest.cost;
         }
         if (typeof state.autoInvest.intervalMs === 'number') {
             autoInvestCurrentIntervalMs = state.autoInvest.intervalMs;

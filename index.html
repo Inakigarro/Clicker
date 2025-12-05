@@ -19,6 +19,10 @@
 				<i class="fa-solid fa-bars"></i>
 			</button>
 			<p>ZClicker</p>
+			<div class="prestige-indicator" id="prestige-indicator">
+				<i class="fa-solid fa-crown"></i>
+				<span id="prestige-level-display">0</span>
+			</div>
 			<span class="spacer"></span>
 			<button id="theme-toggle" aria-label="Cambiar tema">
 				<i id="theme-icon" class="fa-solid fa-moon"></i>
@@ -54,6 +58,14 @@
 			</aside>
 			<aside class="stats-sidebar">
 				<h3>Estadísticas</h3>
+				<div class="stat-item prestige-stat">
+					<span class="stat-label">Nivel de Prestigio:</span>
+					<span class="stat-value" id="stat-prestige-level">0</span>
+				</div>
+				<div class="stat-item prestige-stat">
+					<span class="stat-label">Multiplicador:</span>
+					<span class="stat-value" id="stat-prestige-multiplier">×1.0</span>
+				</div>
 				<div class="stat-item">
 					<span class="stat-label">Puntos Totales:</span>
 					<span class="stat-value" id="stat-total-points">0</span>
@@ -98,13 +110,65 @@
 			</div>
 		</footer>
 
+		<!-- Modal de Combate contra Jefe -->
+		<div class="boss-modal" id="boss-modal">
+			<div class="boss-modal-content">
+				<div class="boss-header">
+					<h2 id="boss-title">¡Jefe de Nivel!</h2>
+					<div class="boss-timer">
+						<i class="fa-solid fa-clock"></i>
+						<span id="boss-timer-display">30</span>s
+					</div>
+				</div>
+				
+				<div class="boss-info">
+					<div class="boss-hp-container">
+						<div class="boss-hp-label">
+							<span id="boss-name">Boss Nivel 10</span>
+							<span id="boss-hp-text">10000 / 10000</span>
+						</div>
+						<div class="boss-hp-bar-bg">
+							<div class="boss-hp-bar" id="boss-hp-bar"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="boss-weapons">
+					<button class="weapon-button" id="weapon-rapid" data-weapon="rapid">
+						<i class="fa-solid fa-gauge-high"></i>
+						<span class="weapon-name">Click Rápido</span>
+						<span class="weapon-damage" id="damage-rapid">100</span>
+						<div class="weapon-cooldown" id="cooldown-rapid"></div>
+					</button>
+					<button class="weapon-button" id="weapon-heavy" data-weapon="heavy">
+						<i class="fa-solid fa-bolt"></i>
+						<span class="weapon-name">Golpe Fuerte</span>
+						<span class="weapon-damage" id="damage-heavy">500</span>
+						<div class="weapon-cooldown" id="cooldown-heavy"></div>
+					</button>
+					<button class="weapon-button" id="weapon-tactical" data-weapon="tactical">
+						<i class="fa-solid fa-bullseye"></i>
+						<span class="weapon-name">Inversión Táctica</span>
+						<span class="weapon-damage" id="damage-tactical">2000</span>
+						<div class="weapon-cooldown" id="cooldown-tactical"></div>
+					</button>
+				</div>
+
+				<div class="boss-message" id="boss-message"></div>
+			</div>
+		</div>
+
+		<!-- Scripts -->
+		<script src="js/version-manager.js"></script>
 		<script src="js/api-client.js"></script>
 		<script src="js/floating-points.js"></script>
 		<script src="js/stats.js"></script>
+		<script src="js/boss.js"></script>
 		<script src="index.js"></script>
 		<script src="js/auto-click.js"></script>
 		<script src="js/auto-invest.js"></script>
 		<script src="js/objective.js"></script>
+		<script src="js/boss.js"></script>
 		<script src="js/theme-toggle.js"></script>
 		<script src="js/user-transfer.js"></script>
 	</body>

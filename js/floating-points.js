@@ -44,9 +44,10 @@ function createFloatingPoints(points, target = null, type = 'auto') {
 
 /**
  * Crea animación para clicks manuales
+ * @param {number} points - Cantidad de puntos ganados (por defecto 1)
  */
-function showManualClickPoints() {
-    createFloatingPoints(1, null, 'manual');
+function showManualClickPoints(points = 1) {
+    createFloatingPoints(points, null, 'manual');
 }
 
 /**

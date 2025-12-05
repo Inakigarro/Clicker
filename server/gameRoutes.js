@@ -58,4 +58,39 @@ router.put('/:userId', async (req, res) => {
   }
 });
 
+// DELETE /api/game/:userId - eliminar estado de juego (para resets)
+router.delete('/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const result = await GameState.findOneAndDelete({ userId });
+    
+    if (!result) {
+      return res.status(404).json({ message: 'No game state found for this user' });
+    }
+    
+    console.log(`🗑️ Estado eliminado para usuario: ${userId}`);
+    res.json({ message: 'Game state deleted successfully', userId });
+  } catch (err) {
+    console.error('Error deleting game state:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// DELETE /api/game/admin/reset-all - ADMIN: resetear toda la base de datos
+router.delete('/admin/reset-all', async (req, res) => {
+  try {
+    const result = await GameState.deleteMany({});
+    
+    console.log(`🗑️ BASE DE DATOS RESETEADA - ${result.deletedCount} documentos eliminados`);
+    res.json({ 
+      message: 'All game states deleted successfully', 
+      deletedCount: result.deletedCount 
+    });
+  } catch (err) {
+    console.error('Error resetting database:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 module.exports = router;
