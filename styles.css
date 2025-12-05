@@ -402,4 +402,343 @@ body {
         transform: translateY(-100px) scale(1.2);
         opacity: 0;
     }
+}/* Media Queries para Responsive Design */
+
+/* Tablets (pantallas medianas) */
+@media (max-width: 768px) {
+    body {
+        header {
+            padding: 0.75rem;
+            flex-wrap: wrap;
+            
+            h1 {
+                font-size: 1.25rem;
+            }
+            
+            #sidebar-toggle {
+                width: 2rem;
+                height: 2rem;
+                font-size: 1rem;
+            }
+            
+            .user-transfer-buttons {
+                gap: 0.5rem;
+                
+                button {
+                    padding: 0.4rem 0.6rem;
+                    font-size: 0.75rem;
+                }
+            }
+        }
+        
+        main {
+            .clicker-section {
+                #points-display {
+                    font-size: 1.5rem;
+                }
+                
+                #clicker-button {
+                    width: 150px;
+                    height: 150px;
+                    
+                    img {
+                        width: 120px;
+                        height: 120px;
+                    }
+                }
+            }
+            
+            .upgrades-sidebar {
+                top: 0.5rem;
+                left: 0.5rem;
+                padding: 0.75rem;
+                gap: 0.5rem;
+                max-width: 140px;
+                
+                .upgrade-button {
+                    min-width: 100px;
+                    padding: 0.6rem 0.8rem;
+                    
+                    i {
+                        font-size: 1rem;
+                    }
+                    
+                    span {
+                        font-size: 0.85rem;
+                    }
+                    
+                    small {
+                        font-size: 0.65rem;
+                    }
+                }
+            }
+            
+            .stats-sidebar {
+                top: 0.5rem;
+                right: 0.5rem;
+                padding: 0.75rem;
+                gap: 0.4rem;
+                min-width: 180px;
+                max-width: 180px;
+                
+                h3 {
+                    font-size: 1rem;
+                    margin-bottom: 0.3rem;
+                    padding-bottom: 0.3rem;
+                }
+                
+                .stat-item {
+                    padding: 0.3rem 0.4rem;
+                    
+                    .stat-label {
+                        font-size: 0.75rem;
+                    }
+                    
+                    .stat-value {
+                        font-size: 0.8rem;
+                    }
+                }
+            }
+        }
+        
+        footer {
+            .objective-info {
+                font-size: 0.7rem;
+            }
+        }
+    }
+}
+
+/* Móviles (pantallas pequeñas) */
+@media (max-width: 480px) {
+    body {
+        grid-template-rows: auto 1fr auto;
+        
+        header {
+            padding: 0.5rem;
+            gap: 0.5rem;
+            
+            h1 {
+                font-size: 1rem;
+                flex: 1;
+                text-align: center;
+            }
+            
+            #sidebar-toggle {
+                width: 1.75rem;
+                height: 1.75rem;
+                font-size: 0.9rem;
+            }
+            
+            .theme-toggle-container {
+                order: -1;
+                
+                #theme-toggle {
+                    width: 1.75rem;
+                    height: 1.75rem;
+                    font-size: 0.9rem;
+                }
+            }
+            
+            .user-transfer-buttons {
+                display: none;
+            }
+        }
+        
+        main {
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: auto;
+            
+            .clicker-section {
+                gap: 0.75rem;
+                height: auto;
+                flex-shrink: 0;
+                
+                #points-display {
+                    font-size: 1.25rem;
+                    margin-top: 0.5rem;
+                }
+                
+                #clicker-button {
+                    width: 120px;
+                    height: 120px;
+                    
+                    img {
+                        width: 90px;
+                        height: 90px;
+                    }
+                }
+                
+                .objective-bar-wrapper {
+                    height: 1.25rem;
+                    
+                    .objective-bar-text {
+                        font-size: 0.65rem;
+                    }
+                }
+            }
+            
+            .upgrades-sidebar {
+                position: static;
+                width: 100%;
+                max-width: none;
+                margin-bottom: 1rem;
+                padding: 0.5rem;
+                flex-direction: row;
+                justify-content: space-around;
+                gap: 0.4rem;
+                overflow: visible;
+                flex-shrink: 0;
+                
+                .upgrade-button {
+                    min-width: auto;
+                    flex: 1;
+                    padding: 0.5rem 0.3rem;
+                    min-height: 70px;
+                    overflow: hidden;
+                    
+                    i {
+                        font-size: 1.1rem;
+                    }
+                    
+                    span {
+                        font-size: 0.7rem;
+                        word-break: break-word;
+                        hyphens: auto;
+                        line-height: 1.2;
+                    }
+                    
+                    small {
+                        font-size: 0.6rem;
+                        word-break: break-word;
+                        line-height: 1.1;
+                    }
+                }
+            }
+            
+            .stats-sidebar {
+                position: static;
+                width: 100%;
+                max-width: none;
+                min-width: auto;
+                padding: 0.5rem;
+                gap: 0.3rem;
+                max-height: none;
+                margin-bottom: 0.5rem;
+                overflow: visible;
+                flex-shrink: 0;
+                
+                h3 {
+                    font-size: 0.9rem;
+                    margin-bottom: 0.25rem;
+                    padding-bottom: 0.25rem;
+                }
+                
+                .stat-item {
+                    padding: 0.25rem 0.4rem;
+                    
+                    .stat-label {
+                        font-size: 0.7rem;
+                    }
+                    
+                    .stat-value {
+                        font-size: 0.75rem;
+                    }
+                }
+            }
+        }
+        
+        &.sidebar-hidden {
+            .upgrades-sidebar {
+                display: none;
+            }
+        }
+        
+        footer {
+            padding: 0.4rem 0.2rem;
+            
+            .objective-info {
+                font-size: 0.65rem;
+                gap: 0.3rem;
+                
+                .objective-invest-button {
+                    padding: 0.35rem;
+                    font-size: 0.65rem;
+                }
+            }
+        }
+        
+        .floating-points {
+            &.manual {
+                font-size: 1.5rem;
+            }
+            
+            &.auto {
+                font-size: 1rem;
+            }
+            
+            &.invest {
+                font-size: 1.25rem;
+            }
+        }
+    }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 360px) {
+    body {
+        main {
+            .clicker-section {
+                #clicker-button {
+                    width: 100px;
+                    height: 100px;
+                    
+                    img {
+                        width: 75px;
+                        height: 75px;
+                    }
+                }
+            }
+            
+            .upgrades-sidebar {
+                .upgrade-button {
+                    padding: 0.4rem 0.2rem;
+                    min-height: 65px;
+                    
+                    i {
+                        font-size: 1rem;
+                    }
+                    
+                    span {
+                        font-size: 0.65rem;
+                        word-break: break-word;
+                        hyphens: auto;
+                        line-height: 1.1;
+                    }
+                    
+                    small {
+                        font-size: 0.55rem;
+                        word-break: break-word;
+                        line-height: 1;
+                    }
+                }
+            }
+            
+            .stats-sidebar {
+                .stat-item {
+                    .stat-label {
+                        font-size: 0.65rem;
+                    }
+                    
+                    .stat-value {
+                        font-size: 0.7rem;
+                    }
+                }
+            }
+        }
+    }
 }
