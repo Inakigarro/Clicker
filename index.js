@@ -15,6 +15,17 @@ localStorage.setItem('points', points);
 function updatePointsDisplay() {
     const pointsDisplay = document.getElementById('points-display');
     pointsDisplay.innerHTML = `<span>${points}</span> Puntos`;
+    
+    // Actualizar estado de botones cuando cambian los puntos
+    if (typeof updateAutoClickCostsDisplay === 'function') {
+        updateAutoClickCostsDisplay();
+    }
+    if (typeof updateAutoInvestUI === 'function') {
+        updateAutoInvestUI();
+    }
+    if (typeof updateObjectiveUI === 'function') {
+        updateObjectiveUI();
+    }
 }
 updatePointsDisplay();
 

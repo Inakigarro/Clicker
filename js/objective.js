@@ -49,8 +49,22 @@ function updateObjectiveUI() {
 		levelLabel.textContent = `Nivel ${objectiveLevel}`;
 	}
 
+	const cost = getObjectiveCost();
+	const currentPoints = typeof points !== 'undefined' ? points : 0;
+
 	if (investButton) {
-		investButton.textContent = `Invertir ${getObjectiveCost()} puntos`;
+		investButton.textContent = `Invertir ${cost} puntos`;
+		
+		// Habilitar/deshabilitar botón según puntos disponibles
+		if (currentPoints >= cost) {
+			investButton.classList.remove('disabled');
+			investButton.removeAttribute('disabled');
+			investButton.title = `Invertir ${cost} puntos en objetivo`;
+		} else {
+			investButton.classList.add('disabled');
+			investButton.setAttribute('disabled', 'true');
+			investButton.title = `Puntos insuficientes. Necesitas ${cost}, tienes ${currentPoints}`;
+		}
 	}
 
 	if (barFill) {

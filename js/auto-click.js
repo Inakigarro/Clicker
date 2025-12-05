@@ -69,13 +69,45 @@ function loadAutoClickState() {
 }
 
 function updateAutoClickCostsDisplay() {
+	const speedButton = document.getElementById('auto-click-speed-upgrade');
+	const powerButton = document.getElementById('auto-click-power-upgrade');
 	const speedCostElement = document.getElementById('auto-click-speed-cost');
 	const powerCostElement = document.getElementById('auto-click-power-cost');
+	
+	const speedCost = getAutoSpeedCost();
+	const powerCost = getAutoPowerCost();
+	const currentPoints = typeof points !== 'undefined' ? points : 0;
+	
 	if (speedCostElement) {
-		speedCostElement.textContent = `Costo: ${getAutoSpeedCost()}`;
+		speedCostElement.textContent = `Costo: ${speedCost}`;
 	}
 	if (powerCostElement) {
-		powerCostElement.textContent = `Costo: ${getAutoPowerCost()}`;
+		powerCostElement.textContent = `Costo: ${powerCost}`;
+	}
+	
+	// Habilitar/deshabilitar botones según puntos disponibles
+	if (speedButton) {
+		if (currentPoints >= speedCost) {
+			speedButton.classList.remove('disabled');
+			speedButton.removeAttribute('disabled');
+			speedButton.title = `Comprar mejora de velocidad (${speedCost} puntos)`;
+		} else {
+			speedButton.classList.add('disabled');
+			speedButton.setAttribute('disabled', 'true');
+			speedButton.title = `Puntos insuficientes. Necesitas ${speedCost}, tienes ${currentPoints}`;
+		}
+	}
+	
+	if (powerButton) {
+		if (currentPoints >= powerCost) {
+			powerButton.classList.remove('disabled');
+			powerButton.removeAttribute('disabled');
+			powerButton.title = `Comprar mejora de poder (${powerCost} puntos)`;
+		} else {
+			powerButton.classList.add('disabled');
+			powerButton.setAttribute('disabled', 'true');
+			powerButton.title = `Puntos insuficientes. Necesitas ${powerCost}, tienes ${currentPoints}`;
+		}
 	}
 }
 

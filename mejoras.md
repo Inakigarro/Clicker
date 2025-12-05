@@ -11,7 +11,11 @@
    - Funciona con 'light' y 'dark'
 3. ✅ **COMPLETADO** - Llamar ensureUserIdentity() al cargar
    - Implementado en `index.js` con DOMContentLoaded
-4. ⏳ **PENDIENTE** - Mostrar "puntos insuficientes" en botones deshabilitados
+4. ✅ **COMPLETADO** - Mostrar "puntos insuficientes" en botones deshabilitados
+   - Botones se deshabilitan visualmente cuando no hay puntos
+   - Tooltips muestran cuántos puntos faltan
+   - Estilos grises y sin hover cuando están deshabilitados
+   - Se actualiza automáticamente al cambiar puntos
 
 ## Fase 2 - UX Básico (2-3 horas)
 1. ⏳ **PENDIENTE** - Números en barra de progreso de objetivo
@@ -42,12 +46,12 @@
 
 ## 🎉 Progreso General
 
-- **Fase 1**: 3/4 completadas (75%) ⬆️
+- **Fase 1**: ✅ 4/4 completadas (100%) 🎉
 - **Fase 2**: 0/4 completadas (0%)
 - **Fase 3**: 1/4 completadas (25%)
 - **Fase 4**: 1/4 completadas (25%)
 
-**Total**: 5/16 tareas completadas (31%) ⬆️
+**Total**: 6/16 tareas completadas (38%) ⬆️
 
 ---
 
@@ -79,10 +83,12 @@
 
 ## 📝 Próximas Tareas Sugeridas
 
-### Prioridad Alta:
-1. ~~**Persistir tema en localStorage**~~ ✅ HECHO
-2. **Botones deshabilitados con mensaje** (30 min)
-3. **Números en barra de progreso** (20 min)
+### ✅ Fase 1 Completada! 
+
+### Prioridad Alta (Fase 2):
+1. **Números en barra de progreso** (20 min)
+2. **Estadística de puntos/segundo** (45 min)
+3. **Animación +1 flotante** (1 hora)
 
 ### Prioridad Media:
 4. **Estadística de puntos/segundo** (45 min)

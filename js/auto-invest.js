@@ -87,9 +87,22 @@ function updateAutoInvestUI() {
     if (!upgradeButton) return;
 
     const cost = getAutoInvestCost();
+    const currentPoints = typeof points !== 'undefined' ? points : 0;
     const labelElement = upgradeButton.querySelector('small');
+    
     if (labelElement) {
         labelElement.textContent = `Costo: ${cost}`;
+    }
+    
+    // Habilitar/deshabilitar botón según puntos disponibles
+    if (currentPoints >= cost) {
+        upgradeButton.classList.remove('disabled');
+        upgradeButton.removeAttribute('disabled');
+        upgradeButton.title = `Comprar auto-invest (${cost} puntos)`;
+    } else {
+        upgradeButton.classList.add('disabled');
+        upgradeButton.setAttribute('disabled', 'true');
+        upgradeButton.title = `Puntos insuficientes. Necesitas ${cost}, tienes ${currentPoints}`;
     }
 }
 
