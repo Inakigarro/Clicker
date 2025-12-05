@@ -461,21 +461,44 @@ function acceptPrestige() {
 	bossState.lastBossLevel = 0;
 	localStorage.setItem('lastBossLevel', '0');
 	
-	// Guardar en backend si está disponible
-	if (typeof scheduleSaveToBackend === 'function') {
-		scheduleSaveToBackend();
-	}
-	
 	// Ocultar modal
 	hidePrestigeRewardModal();
 	
-	// Mostrar mensaje de confirmación
-	showPrestigeConfirmation(prestigeLevel);
+	// Mostrar mensaje de guardando
+	showPrestigeConfirmation(prestigeLevel, true);
 	
-	// Recargar la página después de 2 segundos
-	setTimeout(() => {
-		location.reload();
-	}, 2000);
+	// Guardar en backend de forma inmediata (NO debounced)
+	if (typeof saveGameStateToBackend === 'function' && typeof collectCurrentGameState === 'function' && typeof currentUserId !== 'undefined') {
+		const currentState = collectCurrentGameState();
+		saveGameStateToBackend(currentUserId, currentState)
+			.then((success) => {
+				if (success) {
+					console.log('✅ Progreso de prestigio guardado exitosamente');
+					// Recargar la página después de guardar
+					setTimeout(() => {
+						location.reload();
+					}, 1000);
+				} else {
+					console.error('❌ Error al guardar prestigio en backend');
+					// Recargar de todas formas (localStorage está actualizado)
+					setTimeout(() => {
+						location.reload();
+					}, 1000);
+				}
+			})
+			.catch((error) => {
+				console.error('❌ Error al guardar prestigio:', error);
+				// Recargar de todas formas
+				setTimeout(() => {
+					location.reload();
+				}, 1000);
+			});
+	} else {
+		// Si no hay backend, solo recargar
+		setTimeout(() => {
+			location.reload();
+		}, 2000);
+	}
 }
 
 /**
@@ -511,7 +534,7 @@ function declinePrestige() {
 /**
  * Muestra confirmación de prestigio obtenido
  */
-function showPrestigeConfirmation(level) {
+function showPrestigeConfirmation(level, isSaving = false) {
 	const notification = document.createElement('div');
 	notification.style.cssText = `
 		position: fixed;
@@ -529,11 +552,22 @@ function showPrestigeConfirmation(level) {
 		text-align: center;
 		border: 3px solid #ffd700;
 	`;
-	notification.innerHTML = `
-		<i class="fa-solid fa-crown" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
-		¡Nivel de Prestigio ${level} Alcanzado!<br>
-		<span style="font-size: 0.9rem; opacity: 0.8;">Reiniciando juego...</span>
-	`;
+	
+	if (isSaving) {
+		notification.innerHTML = `
+			<i class="fa-solid fa-crown" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
+			¡Nivel de Prestigio ${level} Alcanzado!<br>
+			<span style="font-size: 0.9rem; opacity: 0.8;">
+				<i class="fa-solid fa-spinner fa-spin"></i> Guardando progreso...
+			</span>
+		`;
+	} else {
+		notification.innerHTML = `
+			<i class="fa-solid fa-crown" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
+			¡Nivel de Prestigio ${level} Alcanzado!<br>
+			<span style="font-size: 0.9rem; opacity: 0.8;">Reiniciando juego...</span>
+		`;
+	}
 	document.body.appendChild(notification);
 }
 
