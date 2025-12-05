@@ -19,7 +19,12 @@
 
 ## Fase 2 - UX Básico (2-3 horas)
 1. ⏳ **PENDIENTE** - Números en barra de progreso de objetivo
-2. ⏳ **PENDIENTE** - Animación de "+1" flotante al hacer click
+2. ✅ **COMPLETADO** - Animación de "+1" flotante al hacer click
+   - Animación flotante para clicks manuales (verde, +1)
+   - Animación flotante para auto-clicks (amarillo, cantidad variable)
+   - Efecto de flotar hacia arriba con fade out
+   - Posiciones aleatorias para evitar superposición
+   - Diferentes estilos visuales según tipo de click
 3. ⏳ **PENDIENTE** - Mejorar responsive mobile
 4. ⏳ **PENDIENTE** - Estadística de puntos/segundo
 
@@ -47,11 +52,11 @@
 ## 🎉 Progreso General
 
 - **Fase 1**: ✅ 4/4 completadas (100%) 🎉
-- **Fase 2**: 0/4 completadas (0%)
+- **Fase 2**: 1/4 completadas (25%) ⬆️
 - **Fase 3**: 1/4 completadas (25%)
 - **Fase 4**: 1/4 completadas (25%)
 
-**Total**: 6/16 tareas completadas (38%) ⬆️
+**Total**: 7/16 tareas completadas (44%) ⬆️
 
 ---
 

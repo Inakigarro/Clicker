@@ -133,6 +133,10 @@ function restartAutoClickInterval() {
 			if (typeof updatePointsDisplay === 'function') {
 				updatePointsDisplay();
 			}
+			// Mostrar animación de puntos flotantes
+			if (typeof showAutoClickPoints === 'function') {
+				showAutoClickPoints(pointsPerTick);
+			}
 		}
 	}, intervalMs);
 
