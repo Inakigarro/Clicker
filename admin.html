@@ -190,6 +190,17 @@
             </div>
         </div>
         
+        <div class="info-box">
+            <h3>🌍 Ambiente</h3>
+            <select id="env-selector" onchange="updateEnvironment()" style="width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid #ddd; margin-top: 0.5rem;">
+                <option value="development">Desarrollo (localhost:3001)</option>
+                <option value="production">Producción (Render.com)</option>
+            </select>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                API actual: <code id="current-api-url">http://localhost:3001/api/game</code>
+            </p>
+        </div>
+        
         <div class="action-section">
             <button class="btn" onclick="checkVersion()">
                 🔄 Verificar Versión
@@ -208,7 +219,20 @@
     </div>
     
     <script>
-        const API_URL = 'http://localhost:3001/api/game';
+        const API_URLS = {
+            development: 'http://localhost:3001/api/game',
+            production: 'https://zclicker-backend.onrender.com/api/game'
+        };
+        
+        let API_URL = API_URLS.development;
+        
+        // Actualizar ambiente
+        function updateEnvironment() {
+            const env = document.getElementById('env-selector').value;
+            API_URL = API_URLS[env];
+            document.getElementById('current-api-url').textContent = API_URL;
+            showResult(`✅ Cambiado a ${env === 'production' ? 'Producción (Render.com)' : 'Desarrollo (localhost)'}`, 'success');
+        }
         
         // Verificar versión del juego
         async function checkVersion() {

@@ -47,31 +47,51 @@ git push origin refactor/rebalanceo-costos-niveles
 
 Usa esto si solo necesitas limpiar el backend sin cambiar frontend.
 
-### Con PowerShell (Windows):
+### Desarrollo (localhost):
 
+**PowerShell:**
 ```powershell
 cd server
 .\reset-database.ps1
 ```
 
-### Con Node.js:
-
+**Node.js:**
 ```bash
 cd server
 node reset-database.js
 ```
 
-### Con curl (Producción):
+**Panel Admin:**
+1. Abre: `http://localhost:5500/admin.html`
+2. Selecciona "Desarrollo (localhost:3001)"
+3. Click en "Resetear Base de Datos"
+4. Confirma la acción
 
-```bash
+### Producción (Render.com):
+
+**Opción 1: Script PowerShell (Recomendado)**
+```powershell
+cd server
+.\reset-production.ps1
+```
+Este script incluye confirmaciones de seguridad y maneja errores comunes.
+
+**Opción 2: Panel Admin Web**
+1. Abre: `admin.html` en tu navegador
+2. Selecciona "Producción (Render.com)" en el dropdown
+3. Click en "Resetear Base de Datos"
+4. Confirma la acción
+
+**Opción 3: curl/Invoke-RestMethod**
+```powershell
+# PowerShell
+Invoke-RestMethod -Uri "https://zclicker-backend.onrender.com/api/game/admin/reset-all" -Method Delete
+
+# O curl
 curl -X DELETE https://zclicker-backend.onrender.com/api/game/admin/reset-all
 ```
 
-### Con Panel Admin:
-
-1. Abre: `http://localhost:5500/admin.html`
-2. Click en "Resetear Base de Datos"
-3. Confirma la acción
+⚠️ **Nota**: El servicio de Render.com puede tardar ~1 minuto en despertar si está inactivo.
 
 ---
 
