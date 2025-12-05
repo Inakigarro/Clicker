@@ -146,3 +146,28 @@
    - Tests unitarios para lógica de juego
    - Tests de integración con backend
    - Tests E2E para flujos críticos
+
+
+
+
+
+
+   Implementación por Fases:
+Fase 1 (Ahora - Preparación):
+
+✅ Indicador visual de prestigio
+✅ Estadísticas de prestigio
+✅ Detectar cuando se alcanza nivel objetivo
+✅ Estructura básica del modal/combate
+Fase 2 (Siguiente):
+
+Modal de combate con UI básica
+Sistema de daño de las 3 armas
+Timer y lógica de victoria/derrota
+Animaciones básicas
+Fase 3 (Refinamiento):
+
+Balanceo de HP y daños
+Efectos visuales mejorados
+Sonidos (si los agregamos)
+Boss con diferentes "fases" visuales

@@ -10,7 +10,9 @@ const BASE_INTERVAL_MS = 1000; // 1 segundo
 const MIN_INTERVAL_MS = 100; // límite para que no se vuelva ridículo
 const BASE_POINTS_PER_TICK = 1;
 const AUTO_SPEED_BASE_COST = 50;
-const AUTO_POWER_BASE_COST = 75;
+const AUTO_SPEED_COST_MULTIPLIER = 1.15; // Crecimiento exponencial
+const AUTO_POWER_BASE_COST = 100;
+const AUTO_POWER_COST_MULTIPLIER = 1.25; // Crecimiento exponencial más agresivo
 
 
 let autoClickInterval = null;
@@ -20,23 +22,35 @@ let autoClickCurrentIntervalMs = BASE_INTERVAL_MS; // intervalo actual de ejecuc
 
 
 function getCurrentIntervalMs() {
-	// Cada nivel de velocidad reduce un 1% el intervalo, hasta un mínimo
-	const factor = Math.pow(0.99, autoClickSpeedLevel); // 0.99, 0.9801, 0.970299...
+	// Cada nivel de velocidad reduce un 5% el intervalo, hasta un mínimo
+	const factor = Math.pow(0.95, autoClickSpeedLevel); // 5% de reducción por nivel
 
 	return Math.max(MIN_INTERVAL_MS, Math.floor(BASE_INTERVAL_MS * factor));
 }
 
 function getPointsPerAutoClick() {
-	// Cada nivel de poder suma +1 punto por tick
-	return BASE_POINTS_PER_TICK + autoClickPowerLevel;
+	// Fórmula multiplicativa: Base × (1 + 0.5 × nivel)
+	// Nivel 0: 1, Nivel 1: 1.5, Nivel 2: 2, Nivel 3: 2.5, etc.
+	const basePoints = BASE_POINTS_PER_TICK;
+	const multiplier = 1 + (0.5 * autoClickPowerLevel);
+	
+	// Aplicar multiplicador de prestigio si existe
+	let prestigeMultiplier = 1;
+	if (typeof getPrestigeMultiplier === 'function') {
+		prestigeMultiplier = getPrestigeMultiplier();
+	}
+	
+	return Math.floor(basePoints * multiplier * prestigeMultiplier);
 }
 
 function getAutoSpeedCost() {
-	return AUTO_SPEED_BASE_COST * (autoClickSpeedLevel + 1);
+	// Costo exponencial: 50 × 1.15^nivel
+	return Math.floor(AUTO_SPEED_BASE_COST * Math.pow(AUTO_SPEED_COST_MULTIPLIER, autoClickSpeedLevel));
 }
 
 function getAutoPowerCost() {
-	return AUTO_POWER_BASE_COST * (autoClickPowerLevel + 1);
+	// Costo exponencial: 100 × 1.25^nivel
+	return Math.floor(AUTO_POWER_BASE_COST * Math.pow(AUTO_POWER_COST_MULTIPLIER, autoClickPowerLevel));
 }
 
 function saveAutoClickState() {

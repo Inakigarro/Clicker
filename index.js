@@ -1,6 +1,20 @@
 let currentUserId;
 let currentUserName;
 
+// Sistema de Prestigio
+let prestigeLevel = parseInt(localStorage.getItem('prestigeLevel')) || 0;
+
+// Función para obtener el multiplicador de prestigio
+function getPrestigeMultiplier() {
+  return 1 + (prestigeLevel * 0.5); // +50% por nivel de prestigio
+}
+
+// Función para obtener el bonus de nivel (aplica a clicks manuales)
+function getLevelBonus() {
+  if (typeof objectiveLevel === 'undefined') return 1;
+  return 1 + (objectiveLevel * 0.01); // +1% por nivel
+}
+
 // Obtengo el boton para registrar los puntos.
 const clickButton = document.getElementById('clicker-button');
 
@@ -26,12 +40,23 @@ function updatePointsDisplay() {
     if (typeof updateObjectiveUI === 'function') {
         updateObjectiveUI();
     }
+    
+    // Actualizar daño de armas en combate de jefe
+    if (typeof updateWeaponDamage === 'function') {
+        updateWeaponDamage();
+    }
 }
 updatePointsDisplay();
 
 // Funcion para manejar el clic en el boton
 function handleClick() {
-    points += 1; // Incremento los puntos en 1 por cada clic
+    const basePoints = 1;
+    const levelBonus = getLevelBonus();
+    const prestigeMultiplier = getPrestigeMultiplier();
+    
+    const earnedPoints = Math.floor(basePoints * levelBonus * prestigeMultiplier);
+    
+    points += earnedPoints; // Incremento los puntos según bonificaciones
     localStorage.setItem('points', points); // Guardo los puntos en localStorage
     updatePointsDisplay(); // Actualizo la interfaz
     
@@ -40,12 +65,12 @@ function handleClick() {
         incrementManualClicks();
     }
     if (typeof addToTotalPoints === 'function') {
-        addToTotalPoints(1);
+        addToTotalPoints(earnedPoints);
     }
     
-    // Mostrar animación de puntos flotantes
+    // Mostrar animación de puntos flotantes (con valor actualizado)
     if (typeof showManualClickPoints === 'function') {
-        showManualClickPoints();
+        showManualClickPoints(earnedPoints);
     }
     
     if (typeof scheduleSaveToBackend === 'function') {

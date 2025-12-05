@@ -12,7 +12,6 @@ const AutoClickSchema = new mongoose.Schema(
 const AutoInvestSchema = new mongoose.Schema(
   {
     level: { type: Number, default: 0 },
-    cost: { type: Number, default: 0 },
     intervalMs: { type: Number, default: 0 },
   },
   { _id: false }
@@ -31,6 +30,7 @@ const GameStateSchema = new mongoose.Schema(
     userId: { type: String, required: true, index: true, unique: true },
     userName: { type: String, required: true, index: true, unique: true },
     points: { type: Number, default: 0 },
+    prestigeLevel: { type: Number, default: 0 },
     autoClick: { type: AutoClickSchema, default: () => ({}) },
     autoInvest: { type: AutoInvestSchema, default: () => ({}) },
     objective: { type: ObjectiveSchema, default: () => ({}) },
