@@ -18,15 +18,36 @@
    - Se actualiza automáticamente al cambiar puntos
 
 ## Fase 2 - UX Básico (2-3 horas)
-1. ⏳ **PENDIENTE** - Números en barra de progreso de objetivo
+1. ✅ **COMPLETADO** - Números en barra de progreso de objetivo
+   - Texto centrado mostrando "progreso actual / total requerido"
+   - Actualización dinámica al invertir puntos
+   - Estilo legible contra el gradiente de fondo
 2. ✅ **COMPLETADO** - Animación de "+1" flotante al hacer click
    - Animación flotante para clicks manuales (verde, +1)
    - Animación flotante para auto-clicks (amarillo, cantidad variable)
+   - Animación flotante para inversiones (rojo, -costo)
    - Efecto de flotar hacia arriba con fade out
    - Posiciones aleatorias para evitar superposición
-   - Diferentes estilos visuales según tipo de click
-3. ⏳ **PENDIENTE** - Mejorar responsive mobile
-4. ⏳ **PENDIENTE** - Estadística de puntos/segundo
+   - Diferentes estilos visuales según tipo de acción
+3. ✅ **COMPLETADO** - Mejorar responsive mobile
+   - Media queries para tablets (≤768px)
+   - Media queries para móviles (≤480px)
+   - Media queries para móviles pequeños (≤360px)
+   - Layout adaptativo: sidebars laterales → apilados verticalmente
+   - Botones touch-friendly con tamaños mínimos
+   - Overflow y word-break para evitar desbordamiento de texto
+   - Tipografía escalable por breakpoint
+4. ✅ **COMPLETADO** - Estadística de puntos/segundo
+   - Panel de estadísticas en el lado derecho
+   - Puntos totales acumulados
+   - Puntos por segundo (PPS) calculados en tiempo real
+   - Clicks manuales totales
+   - Nivel actual del objetivo
+   - Niveles de Auto-Click Speed y Power
+   - Puntos invertidos totales
+   - Tiempo de juego
+   - Actualización automática cada segundo
+   - Persistencia en localStorage
 
 ## Fase 3 - Funcionalidades (4-6 horas)
 1. ⏳ **PENDIENTE** - Sistema de logros básico
@@ -52,11 +73,11 @@
 ## 🎉 Progreso General
 
 - **Fase 1**: ✅ 4/4 completadas (100%) 🎉
-- **Fase 2**: 1/4 completadas (25%) ⬆️
+- **Fase 2**: ✅ 4/4 completadas (100%) 🎉
 - **Fase 3**: 1/4 completadas (25%)
 - **Fase 4**: 1/4 completadas (25%)
 
-**Total**: 7/16 tareas completadas (44%) ⬆️
+**Total**: 11/16 tareas completadas (69%) ⬆️
 
 ---
 
@@ -89,18 +110,39 @@
 ## 📝 Próximas Tareas Sugeridas
 
 ### ✅ Fase 1 Completada! 
+### ✅ Fase 2 Completada!
 
-### Prioridad Alta (Fase 2):
-1. **Números en barra de progreso** (20 min)
-2. **Estadística de puntos/segundo** (45 min)
-3. **Animación +1 flotante** (1 hora)
+### Prioridad Alta (Fase 3):
+1. **Sistema de logros básico** (3-4 horas)
+   - Definir logros (clicks totales, niveles alcanzados, etc.)
+   - Panel de logros en UI
+   - Notificaciones al desbloquear
+   - Persistencia en backend
+
+2. **Rebalancear costos (exponencial)** (2 horas)
+   - Costos crecen exponencialmente en lugar de linealmente
+   - Ajustar fórmulas de auto-click y auto-invest
+   - Balancear progresión del juego
 
 ### Prioridad Media:
-4. **Estadística de puntos/segundo** (45 min)
-5. **Animación +1 flotante** (1 hora)
-6. **Mejorar responsive mobile** (1-2 horas)
+3. **Sonidos básicos** (2 horas)
+   - Sonido de click
+   - Sonido de compra de mejora
+   - Sonido de level up
+   - Toggle para activar/desactivar
 
-### Prioridad Baja:
-7. **Sistema de logros** (3-4 horas)
-8. **Rebalancear economía** (2 horas)
-9. **Sonidos básicos** (2 horas)
+### Prioridad Baja (Fase 4):
+4. **Sistema de prestigio** (8+ horas)
+   - Reset con bonificadores permanentes
+   - Nuevas mejoras desbloqueables
+   - Mecánica de puntos de prestigio
+
+5. **Más tipos de mejoras** (4-6 horas)
+   - Multiplicadores de puntos
+   - Mejoras de costo reducido
+   - Mejoras especiales por nivel
+
+6. **Tests automatizados** (6+ horas)
+   - Tests unitarios para lógica de juego
+   - Tests de integración con backend
+   - Tests E2E para flujos críticos
